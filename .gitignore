@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Other files
+*.gz*
+*bak*
+*old*
+cog-data.js

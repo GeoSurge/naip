@@ -1,0 +1,47 @@
+{
+  "name": "naip",
+  "version": "0.0.0",
+  "description": "Utility Functions for Working with Imagery from the National Agriculture Imagery Program (NAIP)",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "cog-data.js",
+    "get-cog-list.js",
+    "get-cog-index.js",
+    "find-cogs.js"
+  ],
+  "dependencies": {
+    "pako": "^1.0.11",
+    "toab": "^2.1.0"
+  },
+  "devDependencies": {
+    "ava": "^3.12.1",
+    "prettier": "^2.1.2"
+  },
+  "scripts": {
+    "build": "node build.js",
+    "format": "prettier --arrow-parens avoid --print-width=160 --tab-width 4 --trailing-comma=none --write *.js ./data/*.js",
+    "setup": "node setup.js",
+    "test": "ava --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeoSurge/naip.git"
+  },
+  "keywords": [
+    "ag",
+    "agriculture",
+    "aws",
+    "cog",
+    "geotiff",
+    "imagery",
+    "lerc",
+    "naip"
+  ],
+  "author": "Daniel J. Dufour",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/GeoSurge/naip/issues"
+  },
+  "homepage": "https://github.com/GeoSurge/naip#readme"
+}
