@@ -1,6 +1,6 @@
 {
   "name": "naip",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Utility Functions for Working with Imagery from the National Agriculture Imagery Program (NAIP)",
   "main": "./index.js",
   "files": [
