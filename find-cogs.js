@@ -1,11 +1,11 @@
-const get_cog_index = require("./get-cog-index");
+const getCOGIndex = require("./get-cog-index");
 
 const SIZE = 0.0625; // smallest NAIP tile size
 const HALF_SIZE = SIZE / 2;
 
-module.exports = ({ bbox, debug = false, buffer = true, year = null, years = null }) => {
-    const index = get_cog_index();
-    if (debug) console.log("[naip.find-cogs] loaded index");
+module.exports = async ({ bbox, debug = false, buffer = true, year = null, years = null }) => {
+    const index = await getCOGIndex({ debug });
+    if (debug) console.log("[naip.find-cogs] loaded index", Object.keys(index));
 
     if (!Array.isArray(years)) {
         if (year) years = [parseInt(year)];

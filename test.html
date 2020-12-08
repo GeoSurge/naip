@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="./temp/main.js"></script>
+    </head>
+    <body style="background: green">
+        <div id="message"></div>
+        <script>
+            function fail (message) {
+                document.body.style.background = "red";
+                document.getElementById("message").textContent = message;
+            }
+            async function testGetCOGList() {
+                const cogs = await naip.getCOGList({ debug: true});
+                console.log("cogs.length:", cogs.length);
+                if (cogs[0] !== "al/2011/100cm/rgbir_cog/30085/m_3008501_ne_16_1_20110815.tif") {
+                    fail();
+                }
+                if (cogs[cogs.length - 1] !== "wy/2017/100cm/rgbir_cog/45111/m_4511164_se_12_1_20171017.tif") {
+                    fail();
+                }
+                if (cogs.length !== 901772) fail();
+            }
+            testGetCOGList();
+
+            async function testGetCOGIndex() {
+                const index = await naip.getCOGIndex({ debug: true });
+                console.log("testGetCOGIndex index:", index);
+                const years = Object.keys(index).map(k => parseInt(k));
+                if (years.toString() !== [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018].toString()) {
+                    fail("years are" + JSON.stringify(years));
+                }
+            }
+            testGetCOGIndex();    
+            
+            async function testGettingCOGsByBBox() {
+                const bbox = {
+                    xmin: -85.26,
+                    ymin: 35.04,
+                    xmax: -85.25,
+                    ymax: 35.05
+                };
+                const cogs = await naip.findCOGs({ bbox, debug: true });
+                if (cogs.toString() !== [
+                    "tn/2012/100cm/rgbir_cog/35085/m_3508562_se_16_1_20120527.tif",
+                    "tn/2014/100cm/rgbir_cog/35085/m_3508562_se_16_1_20140426.tif",
+                    "tn/2016/60cm/rgbir_cog/35085/m_3508562_se_16_1_20160608.tif",
+                    "tn/2018/60cm/rgbir_cog/35085/m_3508562_se_16_060_20181110.tif"
+                ].toString()) {
+                    fail("search failed with cogs " + cogs.toString());
+                } else {
+                    console.log("search passed");
+                }
+            }
+            testGettingCOGsByBBox();
+        </script>
+    </body>
+</html>

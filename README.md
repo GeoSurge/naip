@@ -13,7 +13,7 @@ npm install naip
 const findCOGs = require("naip/find-cogs");
 
 const bbox = { xmin: -85.26, ymin: 35.04, xmax: -85.25, ymax: 35.05 };
-const cogs = find_cogs({
+const cogs = await findCOGs({
     bbox,
     debug: true, // set debug to true for increased logging
     year: 2016

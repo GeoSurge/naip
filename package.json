@@ -2,7 +2,7 @@
   "name": "naip",
   "version": "0.0.1",
   "description": "Utility Functions for Working with Imagery from the National Agriculture Imagery Program (NAIP)",
-  "main": "index.js",
+  "main": "./index.js",
   "files": [
     "index.js",
     "cog-data.js",
@@ -16,13 +16,18 @@
   },
   "devDependencies": {
     "ava": "^3.12.1",
-    "prettier": "^2.1.2"
+    "concurrently": "^5.3.0",
+    "live-server": "^1.2.1",
+    "prettier": "^2.1.2",
+    "webpack": "^5.10.0",
+    "webpack-cli": "^4.2.0"
   },
   "scripts": {
     "build": "node build.js",
-    "format": "prettier --arrow-parens avoid --print-width=160 --tab-width 4 --trailing-comma=none --write *.js ./data/*.js",
+    "format": "prettier --arrow-parens avoid --print-width=160 --tab-width 4 --trailing-comma=none --write *.js",
     "setup": "node setup.js",
-    "test": "ava --verbose"
+    "test": "ava --verbose",
+    "test:html": "concurrently \"webpack ./index.js -o temp -w\" \"live-server --host=0.0.0.0 --cors --watch=./\""
   },
   "repository": {
     "type": "git",

@@ -41,34 +41,40 @@ const pattern =
 
 const regex = new RegExp(pattern);
 
-module.exports = ({ debug = false } = { debug: false }) => {
+module.exports = async ({ debug = false } = { debug: false }) => {
+    if (debug) console.log("[naip.get-cog-index] starting");
     if (!index) {
-        index = {};
-        const paths = getListOfCOGs();
-        const number_of_cogs = paths.length;
+        if (debug) console.log("[naip.get-cog-index] index doesn't exist yet, so create it");
+        index = new Promise(async resolve => {
+            const result = {};
+            const paths = await getListOfCOGs();
+            if (debug) console.log("[naip.get-cog-index] got ", paths.length, "paths");
+            const number_of_cogs = paths.length;
 
-        let count_added = 0;
-        for (let i = 0; i < number_of_cogs; i++) {
-            const path = paths[i];
-            try {
-                // e.g. path is "al/2011/100cm/rgbir_cog/30085/m_3008501_ne_16_1_20110815.tif
-                const [state, year, res, bands, lat, lon, _lat, _lon, key, quadrant, zone, extra, _year, month, day] = regex.exec(path.trim()).slice(1);
-                const quadrant_lowercase = quadrant.toLowerCase();
-                if (!index[year]) index[year] = {};
-                if (!index[year][lat]) index[year][lat] = {};
-                if (!index[year][lat][lon]) index[year][lat][lon] = {};
-                if (!index[year][lat][lon][key]) index[year][lat][lon][key] = {};
-                if (!index[year][lat][lon][key][quadrant_lowercase]) index[year][lat][lon][key][quadrant_lowercase] = [];
-                index[year][lat][lon][key][quadrant_lowercase].push(path);
-                count_added++;
-            } catch (error) {
-                if (debug) {
-                    console.warn(`paths.slice(${count_added}-5,${count_added}+5):`, paths.slice(count_added - 5, count_added + 5));
-                    console.error("failed to add path (" + path + ") to the index with " + count_added + " previously added");
+            let count_added = 0;
+            for (let i = 0; i < number_of_cogs; i++) {
+                const path = paths[i];
+                try {
+                    // e.g. path is "al/2011/100cm/rgbir_cog/30085/m_3008501_ne_16_1_20110815.tif
+                    const [state, year, res, bands, lat, lon, _lat, _lon, key, quadrant, zone, extra, _year, month, day] = regex.exec(path.trim()).slice(1);
+                    const quadrant_lowercase = quadrant.toLowerCase();
+                    if (!result[year]) result[year] = {};
+                    if (!result[year][lat]) result[year][lat] = {};
+                    if (!result[year][lat][lon]) result[year][lat][lon] = {};
+                    if (!result[year][lat][lon][key]) result[year][lat][lon][key] = {};
+                    if (!result[year][lat][lon][key][quadrant_lowercase]) result[year][lat][lon][key][quadrant_lowercase] = [];
+                    result[year][lat][lon][key][quadrant_lowercase].push(path);
+                    count_added++;
+                } catch (error) {
+                    if (debug) {
+                        console.warn(`paths.slice(${count_added}-5,${count_added}+5):`, paths.slice(count_added - 5, count_added + 5));
+                        console.error("failed to add path (" + path + ") to the index with " + count_added + " previously added");
+                    }
+                    throw error;
                 }
-                throw error;
             }
-        }
+            resolve(result);
+        });
     }
-    return index;
+    return await index;
 };
